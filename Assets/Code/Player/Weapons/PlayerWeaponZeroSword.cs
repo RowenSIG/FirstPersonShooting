@@ -52,13 +52,15 @@ public class PlayerWeaponZeroSword : PlayerWeapon
     public override void UpdateWeapon(float deltaTime, bool leftFire, bool rightFire, bool reloadButton)
     {
         reloadTimer -= deltaTime;
+       
+        var fireInput = leftFire ;
 
-        if (CanFire && rightFire)
+        if (CanFire && fireInput)
         {
             Fire();
         }
 
-        if (rightFire == false)
+        if (fireInput == false)
         {
             canFire = true;
         }

@@ -16,6 +16,8 @@ public class PlayerInput : MonoBehaviour
     public InputAction NextWeaponAction { get; private set; }
     public InputAction PrevWeaponAction { get; private set; }
     public InputAction ScrollWeaponAction { get; private set; }
+    public InputAction ReloadAction { get; private set; }
+    public InputAction SprintAction { get; private set; }
 
     public void Initialise(InputDevice[] devices, int playerIndex, InputSystem_Actions inputControls)
     {
@@ -40,6 +42,8 @@ public class PlayerInput : MonoBehaviour
                 NextWeaponAction = inputControls.Player1Game.Next;
                 PrevWeaponAction = inputControls.Player1Game.Previous;
                 ScrollWeaponAction = inputControls.Player1Game.MouseScroll;
+                SprintAction = inputControls.Player1Game.Sprint;
+                ReloadAction = inputControls.Player1Game.Reload;
                 break;
             case 1:
                 actionMap = inputControls.Player2Game;
@@ -50,6 +54,8 @@ public class PlayerInput : MonoBehaviour
                 AltFireAction = inputControls.Player2Game.AltAttack;
                 NextWeaponAction = inputControls.Player2Game.Next;
                 PrevWeaponAction = inputControls.Player2Game.Previous;
+                SprintAction = inputControls.Player2Game.Sprint;
+                ReloadAction = inputControls.Player2Game.Reload;
                 break;
                 // Add more cases for additional players
         }

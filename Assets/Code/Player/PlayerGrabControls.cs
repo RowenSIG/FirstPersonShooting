@@ -20,10 +20,10 @@ public class PlayerGrabControls : PlayerComponentControls
     public override void UpdateFireInput(bool leftFire, bool rightFire, bool reloadButton)
     {
         //bang
-
+        var fireInput = rightFire;
         if (grab == null)
         {
-            if (leftFire)
+            if (fireInput)
             {
                 var ray = player.PlayerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
@@ -38,7 +38,7 @@ public class PlayerGrabControls : PlayerComponentControls
         }
         else
         {
-            if (leftFire == false)
+            if (fireInput == false)
             {
                 grab = null;
             }

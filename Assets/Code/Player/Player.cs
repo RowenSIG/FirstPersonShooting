@@ -26,7 +26,8 @@ public class Player : MonoBehaviour
 
     public Action OnNewPlayerUp = () => { };
 
-    public bool RopeSwinging { get; private set; }
+    private PlayerEffects modifierEffects = new PlayerEffects();
+    public PlayerEffects ModifierEffects => modifierEffects;
 
     private List<PlayerComponentControls> allControls;
     public void Setup(PlayerConfiguration config)
@@ -52,10 +53,11 @@ public class Player : MonoBehaviour
     {
         Vector2 move = input.MoveAction.ReadValue<Vector2>();
         Vector2 look = input.LookAction.ReadValue<Vector2>();
-        bool jump = input.JumpAction.WasPerformedThisFrame();
+        bool jump = input.JumpAction.IsPressed();
         bool fire = input.FireAction.IsPressed();
         bool altFire = input.AltFireAction.IsPressed();
-        bool reload = false;
+        bool reload = input.ReloadAction.WasPressedThisFrame();
+        bool sprint = input.SprintAction.IsPressed();
 
         bool previousWeapon = input.PrevWeaponAction.WasPressedThisFrame();
         bool nextWeapon = input.NextWeaponAction.WasPressedThisFrame();
@@ -65,7 +67,7 @@ public class Player : MonoBehaviour
         foreach (var control in allControls)
         {
             control.UpdateLookInput(look);
-            control.UpdateMoveInput(move, jump);
+            control.UpdateMoveInput(move, jump, sprint);
             control.UpdateFireInput(fire, altFire, reload);
             control.UpdatePrevNextInput(previousWeapon, nextWeapon,  input.ScrollWeaponAction.ReadValue<Vector2>().y );
         }
@@ -82,7 +84,6 @@ public class Player : MonoBehaviour
 
     public void SetNewPlayerUp(Vector3 up)
     {
-        canJump = true;
         if (Vector3.Dot(up, playerUp) > 0.999f)
             return;
 
@@ -92,17 +93,8 @@ public class Player : MonoBehaviour
 
     }
 
-    public void FloorDetected(Vector3 floorNormal)
-    {
-        canJump = true;
-    }
-    private bool canJump = true;
     public bool CanJump()
     {
-        return canJump;
-    }
-    public void Jump()
-    {
-        canJump = false;
+        return modifierEffects.GetIsTouchingGround();
     }
 }

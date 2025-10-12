@@ -7,6 +7,7 @@ public class PlayerFloorPhysics : PlayerComponentControls
 {
     private float floorNormalThreshold = 0.5f;
     private List<ContactPoint> contactPoints = new List<ContactPoint>();
+    private PlayerEffects.IPlayerModifierEffect activeGroundEffect = null;
 
     public override void UpdateFixedPhysics()
     {
@@ -29,7 +30,29 @@ public class PlayerFloorPhysics : PlayerComponentControls
             var average = floorContactNormalSum / points;
             ApplyAntiRampAcceleration(average.normalized);
         }
+
+        EnsurePlayerTouchingGround(points > 0);
         contactPoints.Clear();
+    }
+
+    private void EnsurePlayerTouchingGround(bool touchingGround)
+    {
+        if (touchingGround)
+        {
+            if (activeGroundEffect == null)
+            {
+                activeGroundEffect = new PlayerEffects.PlayerGroundEffect() { touchingGround = true};
+                player.ModifierEffects.RegisterActiveEffect(activeGroundEffect);
+            }
+        }
+        else
+        {
+            if (activeGroundEffect != null)
+            {
+                player.ModifierEffects.UnregisterActiveEffect(activeGroundEffect);
+                activeGroundEffect = null;
+            }
+        }
     }
 
     private void ApplyAntiRampAcceleration(Vector3 contactNormal)
@@ -38,7 +61,6 @@ public class PlayerFloorPhysics : PlayerComponentControls
         var perp = Vector3.Cross(contactNormal, Vector3.up);
         var rampTangentDirection = Vector3.Cross(perp, contactNormal);
         player.Body.AddForce(rampTangentDirection * Game.GRAVITY_ACCELERATION , ForceMode.Acceleration); //we sort of slide...
-        player.FloorDetected(contactNormal);
 
 #if UNITY_EDITOR
         rampPerp = perp;

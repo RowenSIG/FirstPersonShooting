@@ -914,6 +914,7 @@ GameObject:
   - component: {fileID: 26300697878707754}
   - component: {fileID: 548324880054619696}
   - component: {fileID: 5280050615252803823}
+  - component: {fileID: 4373401327179736605}
   m_Layer: 9
   m_Name: Camera
   m_TagString: Untagged
@@ -1034,6 +1035,54 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &4373401327179736605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817183888821164766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6790e92c09dd37d448f126eca92d20e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraShake
+  shakeDirectionMagnitude: {x: 0.4, y: 0.2, z: 0.2}
+  shakeFOVMagnitude: 10
+  shakeFOVCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 5.8850985
+      outSlope: 5.8850985
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.03723482
+    - serializedVersion: 3
+      time: 0.49704647
+      value: 0.6403527
+      inSlope: -3.2171724
+      outSlope: -3.2171724
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.055362068
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.65406823
+      outSlope: -0.65406823
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.11589529
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  shakeDuration: 0.1
 --- !u!1 &1956917114966072223
 GameObject:
   m_ObjectHideFlags: 0
@@ -1382,6 +1431,7 @@ GameObject:
   - component: {fileID: 1835478854024917615}
   - component: {fileID: -1339204202815890612}
   - component: {fileID: 3338103311966131741}
+  - component: {fileID: 6392447342164730454}
   m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
@@ -1524,6 +1574,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e89ab9280853b409859c8e2a8cdd0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRampPhysics
+--- !u!114 &6392447342164730454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2300695409390495258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c64071493a3d4345b1e210f89c95b10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerJetpackPhysics
 --- !u!1 &2508635631954289049
 GameObject:
   m_ObjectHideFlags: 0
@@ -2456,6 +2518,7 @@ GameObject:
   m_Component:
   - component: {fileID: 720384349825669189}
   - component: {fileID: 8823780177496949198}
+  - component: {fileID: 2569185742351775953}
   m_Layer: 9
   m_Name: MachineGunWeapon
   m_TagString: Untagged
@@ -2503,6 +2566,56 @@ MonoBehaviour:
   muzzleFlashPrefab: {fileID: 8117387777356340387, guid: 7fa702bbbe2d0324c9d8099b22b359cf, type: 3}
   bulletStrikePrefab: {fileID: 3969312498161418494, guid: ff83328e7902f76488d783a50a84429d, type: 3}
   reloadingVisual: {fileID: 3012958521830260441}
+  recoil: {fileID: 2569185742351775953}
+  bulletForce: 0.5
+--- !u!114 &2569185742351775953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3720568271399207974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8536178bd6a0774686bb4a61c3ca8b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponRecoil
+  recoilDisplacementMagnitude: 0.1
+  recoilDirectionMagnitude: {x: -0.5, y: 0, z: 0}
+  recoilDuration: 0.2
+  recoilCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 5.8850985
+      outSlope: 5.8850985
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.03723482
+    - serializedVersion: 3
+      time: 0.49704647
+      value: 0.6403527
+      inSlope: -1.5249671
+      outSlope: -1.5249671
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.08052632
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.65406823
+      outSlope: -0.65406823
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.11589529
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3854846412739626212
 GameObject:
   m_ObjectHideFlags: 0
@@ -5697,6 +5810,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5704469766834436287}
   - component: {fileID: 8294813208145136492}
+  - component: {fileID: 2418585377277788896}
   m_Layer: 9
   m_Name: PistolWeapon
   m_TagString: Untagged
@@ -5743,6 +5857,56 @@ MonoBehaviour:
   muzzleFlashPrefab: {fileID: 8117387777356340387, guid: 7fa702bbbe2d0324c9d8099b22b359cf, type: 3}
   bulletStrikePrefab: {fileID: 3969312498161418494, guid: ff83328e7902f76488d783a50a84429d, type: 3}
   reloadingVisual: {fileID: 8684801598281627694}
+  recoil: {fileID: 2418585377277788896}
+  bulletForce: 1
+--- !u!114 &2418585377277788896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8638106379347941451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8536178bd6a0774686bb4a61c3ca8b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponRecoil
+  recoilDisplacementMagnitude: 0.2
+  recoilDirectionMagnitude: {x: -15, y: 0, z: 0}
+  recoilDuration: 0.5
+  recoilCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 11.371944
+      outSlope: 11.371944
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.0154194515
+    - serializedVersion: 3
+      time: 0.21793848
+      value: 0.96145076
+      inSlope: -1.2423857
+      outSlope: -1.2423857
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.100371376
+      outWeight: 0.055362068
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0.012834633
+      outSlope: 0.012834633
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.22888356
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8659898963912061950
 GameObject:
   m_ObjectHideFlags: 0

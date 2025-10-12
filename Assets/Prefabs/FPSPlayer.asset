@@ -16,12 +16,46 @@ MonoBehaviour:
   verticalLookSpeed: 15
   minYLookAngle: -80
   maxYLookAngle: 88
-  forwardMoveSpeed: 10
-  backwardMoveSpeed: 10
-  sidewaysMoveSpeed: 10
-  forwardSwingSpeed: 12
-  backwardSwingSpeed: 12
-  sidewaysSwingSpeed: 12
-  jumpForce: 6
+  forwardMoveSpeed: 24
+  backwardMoveSpeed: 24
+  sidewaysMoveSpeed: 24
+  sprintSpeedMultiplier: 1.8
+  jumpForce: 7
   swingJumpDirectionalForce: 3
-  linearVelocityDrag: 0.94
+  linearVelocityDrag: 0.89
+  jetpackUpwardsForce: 10
+  jetpackForwardForce: 5
+  jetpackFuelSeconds: 1.4
+  jetpackFuelResponseCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.04734153
+      outSlope: 0.04734153
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.12241598
+    - serializedVersion: 3
+      time: 0.47860086
+      value: 0.5787568
+      inSlope: -0.42056757
+      outSlope: -0.42056757
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.11266824
+    - serializedVersion: 3
+      time: 1
+      value: 0.18876515
+      inSlope: -2.2964644
+      outSlope: -2.2964644
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.030445755
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

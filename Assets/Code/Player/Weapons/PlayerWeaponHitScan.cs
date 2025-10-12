@@ -39,6 +39,12 @@ public class PlayerWeaponHitScan : PlayerWeapon
     [SerializeField]
     private GameObject reloadingVisual;
 
+    [SerializeField]
+    private WeaponRecoil recoil;
+
+    [SerializeField]
+    private float bulletForce;
+
     private float recycleTimer = 0f;
     private float reloadTimer = 0f;
     private bool fireHeld = true;
@@ -68,8 +74,8 @@ public class PlayerWeaponHitScan : PlayerWeapon
 
     public override void Setup(Player player)
     {
-        DoReload();
         base.Setup(player);
+        DoReload(instant : true);
     }
 
     public override void UpdateWeapon(float deltaTime, bool leftFire, bool rightFire, bool reloadButton)
@@ -93,11 +99,12 @@ public class PlayerWeaponHitScan : PlayerWeapon
             DoReload();
         }
 
-        if (CanFire && rightFire)
+        var fireInput = leftFire;
+        if (CanFire && fireInput)
         {
             Fire();
         }
-        fireHeld = rightFire;
+        fireHeld = leftFire;
     }
 
     private void Fire()
@@ -109,6 +116,14 @@ public class PlayerWeaponHitScan : PlayerWeapon
         ammoInMagazine -= roundsFiredPerFire;
 
         FireBullet();
+
+        var shake = player.PlayerCamera.GetComponent<CameraShake>();
+        if (shake != null)
+        {
+            shake.DoShake(0.1f);
+        }
+
+        recoil.DoRecoil(1f);
 
         if (ammoInMagazine <= 0)
         {
@@ -136,6 +151,15 @@ public class PlayerWeaponHitScan : PlayerWeapon
             bulletHit.transform.position = hitInfo.point;
             bulletHit.transform.forward = hitInfo.normal;
 
+            //was it a thing?
+            bulletHit.transform.SetParent(hitInfo.collider.transform, true);
+
+            //let's put some force!
+            if(hitInfo.collider.attachedRigidbody != null)
+            {
+                hitInfo.collider.attachedRigidbody.AddForceAtPosition(ray.direction * bulletForce, hitInfo.point, ForceMode.Impulse);
+            }   
+
             var smashblock = hitInfo.collider.gameObject.GetComponent<SmashBlock>(); 
             if ( smashblock != null )
             {
@@ -151,11 +175,18 @@ public class PlayerWeaponHitScan : PlayerWeapon
         }
     }
 
-    private void DoReload()
+    private void DoReload(bool instant = false)
     {
         totalAmmo += ammoInMagazine;
         ammoInMagazine = 0;
         reloadTimer = reloadTime;
+
+        if(instant)
+        {
+            reloadTimer = 0f;
+            ammoInMagazine = Mathf.Min(magazineCapacity, totalAmmo);
+            totalAmmo -= ammoInMagazine;
+        }
         Log($"[PlayerWeaponHitScan] Reload!");
 
     }
