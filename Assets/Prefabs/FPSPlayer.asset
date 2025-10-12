@@ -23,7 +23,7 @@ MonoBehaviour:
   jumpForce: 7
   swingJumpDirectionalForce: 3
   linearVelocityDrag: 0.89
-  jetpackUpwardsForce: 10
+  jetpackUpwardsForce: 12
   jetpackForwardForce: 5
   jetpackFuelSeconds: 1.4
   jetpackFuelResponseCurve:
