@@ -1,7 +1,5 @@
-using Mono.Cecil.Cil;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 using static Logging;
 
 public class PlayerWeaponHitScan : PlayerWeapon

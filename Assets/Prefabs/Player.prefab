@@ -5847,11 +5847,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed56e986b03e52b429a5ef84897d658e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponHitScan
-  magazineCapacity: 9
+  magazineCapacity: 16
   roundsFiredPerFire: 1
   fireMode: 10
   recycleTime: 0.1
-  reloadTime: 1.5
+  reloadTime: 1
   muzzleFlashPoint: {fileID: 4225646007120165739}
   projectileOrigin: {fileID: 6873535469910130708}
   muzzleFlashPrefab: {fileID: 8117387777356340387, guid: 7fa702bbbe2d0324c9d8099b22b359cf, type: 3}
