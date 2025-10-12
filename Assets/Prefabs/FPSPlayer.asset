@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d72d2c1444b82449c00da101764928, type: 3}
   m_Name: FPSPlayer
   m_EditorClassIdentifier: Assembly-CSharp::PlayerConfiguration
-  horizontalTurnSpeed: 20
-  verticalLookSpeed: 15
+  horizontalTurnSpeed: 12
+  verticalLookSpeed: 9
   minYLookAngle: -80
   maxYLookAngle: 88
   forwardMoveSpeed: 24
