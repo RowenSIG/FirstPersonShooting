@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using Fusion;
 using static Logging;
 
 public class PlayerWeaponHitScan : PlayerWeapon
