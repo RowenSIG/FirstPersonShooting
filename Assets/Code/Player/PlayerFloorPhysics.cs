@@ -28,7 +28,7 @@ public class PlayerFloorPhysics : PlayerComponentControls
         {
             //we have a floor contact, it appears
             var average = floorContactNormalSum / points;
-            ApplyAntiRampAcceleration(average.normalized);
+           ApplyAntiRampAcceleration(average.normalized);
         }
 
         EnsurePlayerTouchingGround(points > 0);
@@ -70,7 +70,10 @@ public class PlayerFloorPhysics : PlayerComponentControls
 
     private void OnCollisionStay(Collision collision)
     {
-        contactPoints.AddRange(collision.contacts);
+        if (player.HasInputAuthority)
+        {
+            contactPoints.AddRange(collision.contacts);
+        }
     }
 
 #if UNITY_EDITOR

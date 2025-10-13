@@ -5,6 +5,7 @@ using static Logging;
 
 public class PlayerWeaponHitScan : PlayerWeapon
 {
+    
     public enum eFireMode
     {
         INVALID = 0,
@@ -145,38 +146,25 @@ public class PlayerWeaponHitScan : PlayerWeapon
         var hit = Physics.Raycast(ray, out var hitInfo, 100f);
         if (hit)
         {
+            NetworkId netObjectId = default;
+            if (hitInfo.collider.gameObject.GetComponent<NetworkObject>() is NetworkObject netObj)
+            {
+                netObjectId = netObj.Id;
+            }
+            
             projectileData.Set(fireCount % projectileData.Length, new ProjectileData()
             {
                 point = hitInfo.point,
-                normal = hitInfo.normal
+                normal = hitInfo.normal,
+                direction = ray.direction,
+                id = netObjectId,
             });
             fireCount++;
 
-            //do the physics bit?
-
-            //let's put some force!
-            if (hitInfo.collider.attachedRigidbody != null)
-            {
-                hitInfo.collider.attachedRigidbody.AddForceAtPosition(ray.direction * bulletForce, hitInfo.point, ForceMode.Impulse);
-            }
-
-            var smashblock = hitInfo.collider.gameObject.GetComponent<SmashBlock>();
-            if (smashblock != null)
-            {
-                var body = smashblock.GetComponent<Rigidbody>();
-                var forceDir = ray.direction + Vector3.up;
-                if (body == null)
-                {
-                    body = smashblock.AddComponent<Rigidbody>();
-                    smashblock.GoPhysical(body);
-                    forceDir = Vector3Utils.RandomVector3().normalized;
-                }
-                body.AddForceAtPosition(forceDir * 10f, hitInfo.point, ForceMode.Impulse);
-            }
         }
     }
 
-    private void ShowBulletHit(Vector3 point, Vector3 normal)
+    private void ShowBulletHit(Vector3 point, Vector3 normal, Vector3 direction, NetworkId id)
     {
         
             //wherever it hit:
@@ -184,7 +172,35 @@ public class PlayerWeaponHitScan : PlayerWeapon
             bulletHit.transform.position = point;
             bulletHit.transform.forward = normal;
 
-            
+        
+        if (id)
+        {
+            Runner.TryFindObject(id, out NetworkObject netObj);
+            if (netObj != null)
+            {
+                bulletHit.transform.SetParent(netObj.transform, true);
+
+                var collider = netObj.GetComponent<Collider>();
+                if (collider.attachedRigidbody != null)
+                {
+                    collider.attachedRigidbody.AddForceAtPosition(direction * bulletForce, point, ForceMode.Impulse);
+                }
+
+                var smashblock = collider.gameObject.GetComponent<SmashBlock>();
+                if (smashblock != null)
+                {
+                    var body = smashblock.GetComponent<Rigidbody>();
+                    var forceDir = direction + Vector3.up;
+                    if (body == null)
+                    {
+                        body = smashblock.AddComponent<Rigidbody>();
+                        smashblock.GoPhysical(body);
+                        forceDir = Vector3Utils.RandomVector3().normalized;
+                    }
+                    body.AddForceAtPosition(forceDir * 10f, point, ForceMode.Impulse);
+                }
+            }
+        }
     }
 
     private void DoReload(bool instant = false)
@@ -214,6 +230,8 @@ public class PlayerWeaponHitScan : PlayerWeapon
     {
         public Vector3 point;
         public Vector3 normal;
+        public Vector3 direction;
+        public NetworkId id;
     }  
     
     public override void Render()
@@ -228,7 +246,7 @@ public class PlayerWeaponHitScan : PlayerWeapon
         {
             var data = projectileData[i % projectileData.Length];
 
-            ShowBulletHit(data.point, data.normal);
+            ShowBulletHit(data.point, data.normal, data.direction, data.id);
 
             // Show projectile visuals (e.g. spawn dummy flying projectile or trail
             // from fireTransform to data.HitPosition or spawn impact effect on data.HitPosition)

@@ -34,7 +34,7 @@ public class Player : NetworkBehaviour
     private bool IsLocal => Object.HasInputAuthority;
 
     public float DeltaTime => Runner.DeltaTime;
-    public float FixedDeltaTime => Runner.DeltaTime;
+    public float FixedDeltaTime => Time.fixedDeltaTime;
 
     public override void Spawned()
     {
@@ -124,14 +124,7 @@ public class Player : NetworkBehaviour
 
         foreach (var control in allControls)
         {
-            control.UpdateFireInput(cachedInput.fire, cachedInput.altFire, cachedInput.reload);
-            control.UpdatePrevNextInput(cachedInput.previousWeapon, cachedInput.nextWeapon, cachedInput.scrollDirection);
-            control.UpdateLookInput(cachedInput.look);
 
-            control.UpdateMoveInput(cachedInput.move, cachedInput.jump, cachedInput.sprint);
-            control.UpdateFireInput(cachedInput.fire, cachedInput.altFire, cachedInput.reload);
-            control.UpdatePrevNextInput(cachedInput.previousWeapon, cachedInput.nextWeapon, cachedInput.scrollDirection);
-            control.UpdateFixedPhysics();
         }
     }
 
@@ -142,6 +135,13 @@ public class Player : NetworkBehaviour
 
         foreach (var control in allControls)
         {
+            control.UpdateFireInput(cachedInput.fire, cachedInput.altFire, cachedInput.reload);
+            control.UpdatePrevNextInput(cachedInput.previousWeapon, cachedInput.nextWeapon, cachedInput.scrollDirection);
+            control.UpdateLookInput(cachedInput.look);
+            control.UpdateMoveInput(cachedInput.move, cachedInput.jump, cachedInput.sprint);
+            control.UpdateFireInput(cachedInput.fire, cachedInput.altFire, cachedInput.reload);
+            control.UpdatePrevNextInput(cachedInput.previousWeapon, cachedInput.nextWeapon, cachedInput.scrollDirection);
+            control.UpdateFixedPhysics();
             // control.UpdateMoveInput(cachedInput.move, cachedInput.jump, cachedInput.sprint);
             // control.UpdateFixedPhysics();
         }
