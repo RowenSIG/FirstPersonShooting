@@ -33,10 +33,13 @@ public class Player : NetworkBehaviour
 
     private bool IsLocal => Object.HasInputAuthority;
 
+    public float DeltaTime => Runner.DeltaTime;
+    public float FixedDeltaTime => Runner.DeltaTime;
+
     public override void Spawned()
     {
         base.Spawned();
-        if(IsLocal == false)
+        if (IsLocal == false)
         {
             playerCamera.enabled = false;
         }
@@ -105,38 +108,42 @@ public class Player : NetworkBehaviour
             nextWeapon = input.NextWeaponAction.WasPressedThisFrame(),
             scrollDirection = input.ScrollWeaponAction != null ? input.ScrollWeaponAction.ReadValue<Vector2>().y : 0f,
         };
+   
+    }
 
-        
+    public override void FixedUpdateNetwork()
+    {
+        UpdateNonPhysics();
+    }
+
+    public void UpdateNonPhysics()
+    {
+        if (IsLocal == false)
+            return;
+
+
         foreach (var control in allControls)
         {
             control.UpdateFireInput(cachedInput.fire, cachedInput.altFire, cachedInput.reload);
             control.UpdatePrevNextInput(cachedInput.previousWeapon, cachedInput.nextWeapon, cachedInput.scrollDirection);
-        }
-    }
-    
-    public override void FixedUpdateNetwork()
-    {
-        if (IsLocal == false)
-            return;
-
-        foreach (var control in allControls)
-        {
             control.UpdateLookInput(cachedInput.look);
+
             control.UpdateMoveInput(cachedInput.move, cachedInput.jump, cachedInput.sprint);
-            // control.UpdateFireInput(cachedInput.fire, cachedInput.altFire, cachedInput.reload);
-            // control.UpdatePrevNextInput(cachedInput.previousWeapon, cachedInput.nextWeapon, cachedInput.scrollDirection);
+            control.UpdateFireInput(cachedInput.fire, cachedInput.altFire, cachedInput.reload);
+            control.UpdatePrevNextInput(cachedInput.previousWeapon, cachedInput.nextWeapon, cachedInput.scrollDirection);
             control.UpdateFixedPhysics();
         }
     }
 
-    void FixedUpdateX()
+    void FixedUpdate()
     {
         if (IsLocal == false)
             return;
 
         foreach (var control in allControls)
         {
-            control.UpdateFixedPhysics();
+            // control.UpdateMoveInput(cachedInput.move, cachedInput.jump, cachedInput.sprint);
+            // control.UpdateFixedPhysics();
         }
     }
 

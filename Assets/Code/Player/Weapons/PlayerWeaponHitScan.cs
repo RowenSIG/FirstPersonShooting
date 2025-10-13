@@ -74,7 +74,7 @@ public class PlayerWeaponHitScan : PlayerWeapon
     public override void Setup(Player player)
     {
         base.Setup(player);
-        DoReload(instant : true);
+        DoReload(instant: true);
     }
 
     public override void UpdateWeapon(float deltaTime, bool leftFire, bool rightFire, bool reloadButton)
@@ -84,7 +84,7 @@ public class PlayerWeaponHitScan : PlayerWeapon
         recycleTimer -= deltaTime;
 
         reloadingVisual.EnsureActive(reloading);
-        
+
         if (reloading && reloadTimer <= 0f)
         {
             ammoInMagazine = Mathf.Min(magazineCapacity, totalAmmo);
@@ -139,40 +139,52 @@ public class PlayerWeaponHitScan : PlayerWeapon
         var localRot = flash.transform.localEulerAngles;
         localRot.z = Random.Range(0, 30f);
         flash.transform.localEulerAngles = localRot;
-        
+
         //
         var ray = player.PlayerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         var hit = Physics.Raycast(ray, out var hitInfo, 100f);
         if (hit)
         {
-            //wherever it hit:
-            var bulletHit = Instantiate(bulletStrikePrefab);
-            bulletHit.transform.position = hitInfo.point;
-            bulletHit.transform.forward = hitInfo.normal;
+            projectileData.Set(fireCount % projectileData.Length, new ProjectileData()
+            {
+                point = hitInfo.point,
+                normal = hitInfo.normal
+            });
+            fireCount++;
 
-            //was it a thing?
-            bulletHit.transform.SetParent(hitInfo.collider.transform, true);
+            //do the physics bit?
 
             //let's put some force!
-            if(hitInfo.collider.attachedRigidbody != null)
+            if (hitInfo.collider.attachedRigidbody != null)
             {
                 hitInfo.collider.attachedRigidbody.AddForceAtPosition(ray.direction * bulletForce, hitInfo.point, ForceMode.Impulse);
-            }   
+            }
 
-            var smashblock = hitInfo.collider.gameObject.GetComponent<SmashBlock>(); 
-            if ( smashblock != null )
+            var smashblock = hitInfo.collider.gameObject.GetComponent<SmashBlock>();
+            if (smashblock != null)
             {
                 var body = smashblock.GetComponent<Rigidbody>();
                 var forceDir = ray.direction + Vector3.up;
-                if(body == null)
+                if (body == null)
                 {
                     body = smashblock.AddComponent<Rigidbody>();
                     smashblock.GoPhysical(body);
                     forceDir = Vector3Utils.RandomVector3().normalized;
                 }
-                body.AddForceAtPosition( forceDir * 10f, hitInfo.point, ForceMode.Impulse );
+                body.AddForceAtPosition(forceDir * 10f, hitInfo.point, ForceMode.Impulse);
             }
         }
+    }
+
+    private void ShowBulletHit(Vector3 point, Vector3 normal)
+    {
+        
+            //wherever it hit:
+            var bulletHit = Instantiate(bulletStrikePrefab);
+            bulletHit.transform.position = point;
+            bulletHit.transform.forward = normal;
+
+            
     }
 
     private void DoReload(bool instant = false)
@@ -181,7 +193,7 @@ public class PlayerWeaponHitScan : PlayerWeapon
         ammoInMagazine = 0;
         reloadTimer = reloadTime;
 
-        if(instant)
+        if (instant)
         {
             reloadTimer = 0f;
             ammoInMagazine = Mathf.Min(magazineCapacity, totalAmmo);
@@ -192,4 +204,36 @@ public class PlayerWeaponHitScan : PlayerWeapon
     }
 
 
+     [Networked]
+    private int fireCount { get; set; }
+    [Networked, Capacity(32)]
+    private NetworkArray<ProjectileData> projectileData { get; }
+
+    private int visibleFireCount;
+    private struct ProjectileData : INetworkStruct
+    {
+        public Vector3 point;
+        public Vector3 normal;
+    }  
+    
+    public override void Render()
+    {
+        base.Render();
+        if (visibleFireCount < fireCount)
+        {
+            // Play fire effects (e.g. fire sound, muzzle particle)
+        }
+
+        for (int i = visibleFireCount; i < fireCount; i++)
+        {
+            var data = projectileData[i % projectileData.Length];
+
+            ShowBulletHit(data.point, data.normal);
+
+            // Show projectile visuals (e.g. spawn dummy flying projectile or trail
+            // from fireTransform to data.HitPosition or spawn impact effect on data.HitPosition)
+        }
+
+        visibleFireCount = fireCount;
+    }
 }

@@ -58,7 +58,7 @@ public class PlayerVisualsControls : PlayerComponentControls
         if (shiftTimer > 0)
         {
             up = Vector3.Lerp(shiftFromUp, PlayerUp, 1f - (shiftTimer / SHIFT_TIME));
-            shiftTimer -= Time.deltaTime;
+            shiftTimer -= PlayerDT;
 
 
             Vector3 projectedForwardX = Vector3.ProjectOnPlane(transform.forward + transform.up * 2f, up).normalized;

@@ -17,11 +17,11 @@ public class PlayerPhysicsControls : PlayerComponentControls
         var backwardStrength = config.backwardMoveSpeed;
         var sidewaysStrength = config.sidewaysMoveSpeed;
 
+        
+        var forwardForce = Mathf.Clamp(moveInput.y, 0f, 1f) * PlayerFixedDT * forwardStrength;
+        var backwardForce = Mathf.Clamp(moveInput.y, -1f, 0f) * PlayerFixedDT * backwardStrength;
 
-        var forwardForce = Mathf.Clamp(moveInput.y, 0f, 1f) * PlayerDT * forwardStrength;
-        var backwardForce = Mathf.Clamp(moveInput.y, -1f, 0f) * PlayerDT * backwardStrength;
-
-        var sidewaysForce = moveInput.x * PlayerDT * sidewaysStrength;
+        var sidewaysForce = moveInput.x * PlayerFixedDT * sidewaysStrength;
 
         var force = new Vector3(sidewaysForce, 0, forwardForce + backwardForce);
         Body.AddRelativeForce(force, ForceMode.VelocityChange);

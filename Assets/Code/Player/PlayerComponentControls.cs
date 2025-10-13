@@ -24,12 +24,7 @@ public abstract class PlayerComponentControls : MonoBehaviour
             return player.PlayerUp;
         }
     }
-    protected float PlayerDT
-    {
-        get
-        {
-            return Time.deltaTime;
-        }
-    }
+    protected float PlayerDT => player.DeltaTime;
+    protected float PlayerFixedDT => player.FixedDeltaTime;
 }
 

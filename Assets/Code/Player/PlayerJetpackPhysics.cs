@@ -20,12 +20,12 @@ public class PlayerJetpackPhysics : PlayerComponentControls
 
             if (postJumpNoPressPeriod == false && jumpInput && remainingFuel > 0f)
             {
-                var upwardsForce = Vector3.up * config.jetpackUpwardsForce * PlayerDT;
-                var forwardsForce = player.transform.forward * config.jetpackForwardForce * PlayerDT * Mathf.Clamp01(moveInput.y);
+                var upwardsForce = Vector3.up * config.jetpackUpwardsForce * PlayerFixedDT;
+                var forwardsForce = player.transform.forward * config.jetpackForwardForce * PlayerFixedDT * Mathf.Clamp01(moveInput.y);
                 var forceMultiplier = config.jetpackFuelResponseCurve.Evaluate(1f - (remainingFuel / config.jetpackFuelSeconds));
                 var totalForce = (upwardsForce + forwardsForce) * forceMultiplier;
                 player.Body.AddForce(totalForce, ForceMode.VelocityChange);
-                remainingFuel -= PlayerDT;
+                remainingFuel -= PlayerFixedDT;
             }
             
             if (postJumpNoPressPeriod && jumpInput == false)
