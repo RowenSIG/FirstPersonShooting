@@ -38,18 +38,25 @@ public class DynamicMultiplayerManager : MonoBehaviour
     public void Initialise()
     {
         inputControls = new InputSystem_Actions();
-        AssignKeyboardAndMouseToPlayerZero();
         DetectExistingGamepads();
     }
-    
-    void AssignKeyboardAndMouseToPlayerZero()
+
+    public void EnsureInitialised()
+    {
+        if (inputControls == null)
+        {
+            Initialise();
+        }
+    }
+
+    public void AssignKeyboardAndMouseToPlayer(Player player)
     {
         var keyboard = Keyboard.current;
         var mouse = Mouse.current;
 
         if (keyboard != null && mouse != null)
         {
-            AddNewPlayer( new InputDevice[] { keyboard, mouse } );
+            AddNewPlayer( new InputDevice[] { keyboard, mouse }, player );
         }
     }
 
@@ -83,10 +90,11 @@ public class DynamicMultiplayerManager : MonoBehaviour
         }
     }
 
-    void AddNewPlayer(InputDevice[] devices)
+
+
+    void AddNewPlayer(InputDevice[] devices, Player player)
     {
-        var player = PlayerManager.Instance.InstantiatePlayer();
-        int playerIndex = PlayerManager.Instance.NumPlayers;
+        int playerIndex = PlayerManager.Instance.NumPlayers - 1;
         player.InitialiseInput(devices, playerIndex, inputControls);
         foreach (var device in devices)
         {

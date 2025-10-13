@@ -34,7 +34,7 @@ public class PlayerWeaponControls : PlayerComponentControls
     {
         foreach(var weapon in allWeapons)
         {
-            weapon.gameObject.EnsureActive(weapon == zWeapon);
+            weapon.IsVisible = weapon == zWeapon;
         }
 
         currentWeapon = zWeapon;

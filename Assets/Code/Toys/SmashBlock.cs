@@ -2,15 +2,11 @@ using UnityEngine;
 
 public class SmashBlock : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    
+    private float massOnAwake = 1f;
 
-    // Update is called once per frame
-    void Update()
+    public void GoPhysical(Rigidbody rigidbody)
     {
-        
+        rigidbody.mass = massOnAwake;
     }
 }

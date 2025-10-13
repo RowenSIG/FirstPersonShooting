@@ -24,7 +24,7 @@ public class Game : MonoBehaviour
     void Start()
     {
         Log($"[Game] Start - initialise input");
-        DynamicMultiplayerManager.Instance.Initialise();
+        //DynamicMultiplayerManager.Instance.Initialise();
     }
     
 }

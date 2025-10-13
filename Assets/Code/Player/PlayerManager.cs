@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Fusion;
 using UnityEngine;
 using static Logging;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : SimulationBehaviour, IPlayerJoined
 {
     private static PlayerManager instance;
-
+    
     public static PlayerManager Instance => instance;
 
     private GameObject playerContainer = null;
@@ -28,7 +29,7 @@ public class PlayerManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public Player InstantiatePlayer()
+    public Player InstantiatePlayer(PlayerRef playerRef)
     {
         if (playerContainer == null)
         {
@@ -37,7 +38,8 @@ public class PlayerManager : MonoBehaviour
         }
 
         Log($"[PlayerManager] InstantiatePlayer");
-        var player = Instantiate(playerPrefab, playerContainer.transform);
+        var playerObj = Runner.Spawn(playerPrefab.gameObject, position: playerContainer.transform.position, rotation: Quaternion.identity, inputAuthority: playerRef);
+        var player = playerObj.GetComponent<Player>();
         player.Setup(playerConfigPrefab);
         player.gameObject.name = $"Player[{players.Count}]";
 
@@ -53,6 +55,17 @@ public class PlayerManager : MonoBehaviour
         {
             players.Remove(player);
             Destroy(player.gameObject);
+        }
+    }
+
+    public void PlayerJoined(PlayerRef playerRef)
+    {
+        if (playerRef == Runner.LocalPlayer)
+        {
+            DynamicMultiplayerManager.Instance.EnsureInitialised();
+            var player = InstantiatePlayer(playerRef);
+            players.Add(player);
+            DynamicMultiplayerManager.Instance.AssignKeyboardAndMouseToPlayer(player);
         }
     }
 

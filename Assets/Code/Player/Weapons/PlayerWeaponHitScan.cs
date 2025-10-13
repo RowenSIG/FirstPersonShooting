@@ -166,6 +166,7 @@ public class PlayerWeaponHitScan : PlayerWeapon
                 if(body == null)
                 {
                     body = smashblock.AddComponent<Rigidbody>();
+                    smashblock.GoPhysical(body);
                     forceDir = Vector3Utils.RandomVector3().normalized;
                 }
                 body.AddForceAtPosition( forceDir * 10f, hitInfo.point, ForceMode.Impulse );

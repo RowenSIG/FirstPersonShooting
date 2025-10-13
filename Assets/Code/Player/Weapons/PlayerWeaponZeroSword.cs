@@ -52,8 +52,8 @@ public class PlayerWeaponZeroSword : PlayerWeapon
     public override void UpdateWeapon(float deltaTime, bool leftFire, bool rightFire, bool reloadButton)
     {
         reloadTimer -= deltaTime;
-       
-        var fireInput = leftFire ;
+
+        var fireInput = leftFire;
 
         if (CanFire && fireInput)
         {
@@ -65,6 +65,7 @@ public class PlayerWeaponZeroSword : PlayerWeapon
             canFire = true;
         }
     }
+    
 
     private void Fire()
     {
