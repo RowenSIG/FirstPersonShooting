@@ -1,20 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerEffects
+public class EnemyEffects
 {
 
-    private List<IPlayerModifierEffect> activeEffects = new();
-
-    public void RegisterActiveEffect(IPlayerModifierEffect effect)
+    private List<IEnemyModifierEffect> activeEffects = new();
+    public void RegisterActiveEffect(IEnemyModifierEffect effect)
     {
         if (!activeEffects.Contains(effect))
         {
             activeEffects.Add(effect);
         }
     }
-
-    public void UnregisterActiveEffect(IPlayerModifierEffect effect)
+    public void UnregisterActiveEffect(IEnemyModifierEffect effect)
     {
         if (activeEffects.Contains(effect))
         {
@@ -27,18 +25,18 @@ public class PlayerEffects
         float multiplier = 1f;
         foreach (var effect in activeEffects)
         {
-            if (effect is PlayerMovementSpeedEffect speedEffect)
+            if (effect is IEnemyMovespeedEffect speedEffect)
             {
                 multiplier *= speedEffect.speedMultiplier;
             }
         }
         return multiplier;
     }
-    public bool GetIsTouchingGround()
+     public bool GetIsTouchingGround()
     {
         foreach (var effect in activeEffects)
         {
-            if (effect is PlayerGroundEffect groundEffect)
+            if (effect is EnemyGroundEffect groundEffect)
             {
                 return groundEffect.touchingGround;
             }
@@ -49,7 +47,7 @@ public class PlayerEffects
     {
         foreach (var effect in activeEffects)
         {
-            if (effect is PlayerJumpingEffect)
+            if (effect is EnemyJumpingEffect)
             {
                 return true;
             }
@@ -57,21 +55,28 @@ public class PlayerEffects
         return false;
     }
 
-    public interface IPlayerModifierEffect
+
+    public interface IEnemyModifierEffect
     {
+
     }
 
+    public interface IEnemyMovespeedEffect : IEnemyModifierEffect
+    {
+        float speedMultiplier { get; }
+    }
 
-    public class PlayerMovementSpeedEffect : IPlayerModifierEffect
+    public class EnemyMovementSpeedEffect : IEnemyModifierEffect
     {
         public float speedMultiplier { get; set; } = 1f;
     }
 
-    public class PlayerGroundEffect : IPlayerModifierEffect
+    public class EnemyGroundEffect : IEnemyModifierEffect
     {
         public bool touchingGround { get; set; } = false;
     }
-    public class PlayerJumpingEffect : IPlayerModifierEffect
+
+    public class EnemyJumpingEffect : IEnemyModifierEffect
     {
         //marker class
     }

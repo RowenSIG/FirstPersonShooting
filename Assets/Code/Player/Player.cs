@@ -24,8 +24,6 @@ public class Player : NetworkBehaviour
     private int playerIndex;
     public int PlayerIndex => playerIndex;
 
-    public Action OnNewPlayerUp = () => { };
-
     private PlayerEffects modifierEffects = new PlayerEffects();
     public PlayerEffects ModifierEffects => modifierEffects;
 
@@ -92,9 +90,6 @@ public class Player : NetworkBehaviour
         if (IsLocal == false)
             return;
 
-        if (input.MoveAction == null)
-            return;
-
         cachedInput = new InputCache()
         {
             move = input.MoveAction.ReadValue<Vector2>(),
@@ -142,20 +137,7 @@ public class Player : NetworkBehaviour
             control.UpdateFireInput(cachedInput.fire, cachedInput.altFire, cachedInput.reload);
             control.UpdatePrevNextInput(cachedInput.previousWeapon, cachedInput.nextWeapon, cachedInput.scrollDirection);
             control.UpdateFixedPhysics();
-            // control.UpdateMoveInput(cachedInput.move, cachedInput.jump, cachedInput.sprint);
-            // control.UpdateFixedPhysics();
         }
-    }
-
-    public void SetNewPlayerUp(Vector3 up)
-    {
-        if (Vector3.Dot(up, playerUp) > 0.999f)
-            return;
-
-        Log($"[PlayerComponentControls] SetNewPlayerUp [{up}]");
-        playerUp = up;
-        OnNewPlayerUp.Invoke();
-
     }
 
     public bool CanJump()

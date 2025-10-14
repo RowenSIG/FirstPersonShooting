@@ -1,10 +1,8 @@
-using Unity.Mathematics;
 using UnityEngine;
-using static Logging;
 
-public class PlayerVisualsControls : PlayerComponentControls
+public class EnemyVisualsControls : EnemyComponentControls
 {
-    [SerializeField]
+      [SerializeField]
     private Rigidbody rigidBody;
 
     [SerializeField]
@@ -21,28 +19,20 @@ public class PlayerVisualsControls : PlayerComponentControls
         }
 
         //horizontal turning
-        var up = PlayerUp;
-        var rotX = Quaternion.AngleAxis(x * config.horizontalTurnSpeed * PlayerDT, up);
+        var up = EnemyUp;
+        var rotX = Quaternion.AngleAxis(x * config.horizontalTurnSpeed * EnemyDT, up);
         var look = transform.rotation;
         look = rotX * look;
         transform.rotation = look;
 
         EnsureUpwardsVector();
 
-        //vertical turning
-        var right = Vector3.right;
-        var currentUpAngle = camLookTransform.localEulerAngles.x;
-        if (currentUpAngle > 180)
-            currentUpAngle -= 360;
-        var rotateSpeed = -input.y * config.verticalLookSpeed;
-        currentUpAngle = Mathf.Clamp(currentUpAngle + rotateSpeed * PlayerDT, config.minYLookAngle, config.maxYLookAngle);
-        var rot = Quaternion.AngleAxis(currentUpAngle, right);
-        camLookTransform.localRotation = rot;
+      
     }
 
     private void EnsureUpwardsVector()
     {
-        var up = PlayerUp;
+        var up = EnemyUp;
         //compute our look along the plane our up is normal to:
         Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, up).normalized;
 
