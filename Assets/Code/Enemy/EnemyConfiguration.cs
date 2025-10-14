@@ -1,6 +1,7 @@
 using UnityEngine;
+[CreateAssetMenu(fileName = "EnemyConfiguration", menuName = "Scriptable Objects/EnemyConfiguration")]
 
-public class EnemyConfiguration : MonoBehaviour
+public class EnemyConfiguration : ScriptableObject
 {
      public float horizontalTurnSpeed;
     public float verticalLookSpeed;
@@ -14,8 +15,4 @@ public class EnemyConfiguration : MonoBehaviour
     public float swingJumpDirectionalForce;
     public float linearVelocityDrag;
 
-    public float jetpackUpwardsForce;
-    public float jetpackForwardForce;
-    public float jetpackFuelSeconds;
-    public AnimationCurve jetpackFuelResponseCurve;
 }

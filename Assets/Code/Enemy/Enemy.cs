@@ -20,7 +20,7 @@ public class Enemy : NetworkBehaviour
 
     private List<EnemyComponentControls> allControls;
 
-    private bool IsLocal => Object.HasInputAuthority;
+    private bool IsLocal => Object.HasStateAuthority;
 
     public float DeltaTime => Runner.DeltaTime;
     public float FixedDeltaTime => Time.fixedDeltaTime;
@@ -83,6 +83,8 @@ public class Enemy : NetworkBehaviour
     {
         if (IsLocal == false)
             return;
+
+        input.Update();
 
         foreach (var control in allControls)
         {

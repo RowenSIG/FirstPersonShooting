@@ -17,6 +17,17 @@ public class PlayerManager : SimulationBehaviour, IPlayerJoined
     private PlayerConfiguration playerConfigPrefab;
 
     private List<Player> players = new List<Player>();
+    public Player GetLocalPlayer()
+    {
+        foreach(var player in players)
+        {
+            if(player.Object.InputAuthority == Runner.LocalPlayer)
+            {
+                return player;
+            }
+        }
+        return null;
+    }
 
     void Awake()
     {
