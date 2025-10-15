@@ -38,10 +38,16 @@ public class EnemyManager : SimulationBehaviour
 
     void Update()
     {
-        if (Time.realtimeSinceStartup < 10f)
+        if (Time.realtimeSinceStartup < 15f)
             return;
 
-        if (Runner.IsSharedModeMasterClient && Time.timeSinceLevelLoad - lastSpawn > enemySpawnPeriod && enemies.Count < enemyLimit)
+        if (Runner == null)
+            return;
+
+        if (Runner.IsSharedModeMasterClient 
+        && Runner.CanSpawn
+        && Time.timeSinceLevelLoad - lastSpawn > enemySpawnPeriod 
+        && enemies.Count < enemyLimit)
         {
             InstantiateEnemy();
             lastSpawn = Time.timeSinceLevelLoad;
