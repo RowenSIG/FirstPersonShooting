@@ -65,7 +65,7 @@ public class EnemyFloorPhysics : EnemyComponentControls
 
     private void OnCollisionStay(Collision collision)
     {
-        if (enemy.HasInputAuthority)
+        if (enemy != null && enemy.HasInputAuthority)
         {
             contactPoints.AddRange(collision.contacts);
         }

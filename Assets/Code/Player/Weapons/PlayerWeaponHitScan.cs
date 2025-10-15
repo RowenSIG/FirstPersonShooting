@@ -159,12 +159,6 @@ public class PlayerWeaponHitScan : PlayerWeapon
                     && hitInfo.collider.attachedRigidbody.GetComponent<NetworkObject>() is NetworkObject netObj2)
                 {
                     netObjectId = netObj2.Id;
-
-
-                    if(netObj2.GetComponent<Enemy>() is Enemy enemy)
-                    {
-                        EnemyManager.Instance.EnemyHit(enemy, bulletDamage);
-                    }
                 }
             }
             
@@ -223,6 +217,11 @@ public class PlayerWeaponHitScan : PlayerWeapon
                 if (rb != null)
                 {
                     rb.AddForceAtPosition(direction * bulletForce, point, ForceMode.Impulse);
+
+                    if(netObj.GetComponent<Enemy>() is Enemy enemy)
+                    {
+                        EnemyManager.Instance.EnemyHit(enemy, bulletDamage);
+                    }
                 }
 
             }

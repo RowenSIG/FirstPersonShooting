@@ -70,7 +70,7 @@ public class PlayerFloorPhysics : PlayerComponentControls
 
     private void OnCollisionStay(Collision collision)
     {
-        if (player.HasInputAuthority)
+        if (player != null && player.HasInputAuthority)
         {
             contactPoints.AddRange(collision.contacts);
         }
