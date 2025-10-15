@@ -25,9 +25,18 @@ public class Enemy : NetworkBehaviour
     public float DeltaTime => Runner.DeltaTime;
     public float FixedDeltaTime => Time.fixedDeltaTime;
 
+    [Networked]
+    public float hp { get; set; }
+
     public override void Spawned()
     {
         base.Spawned();
+    }
+
+    public override void Despawned(NetworkRunner runner, bool hasState)
+    {
+        base.Despawned(runner, hasState);
+        Destroy(gameObject);
     }
 
     public void Setup(EnemyConfiguration config)
@@ -39,6 +48,8 @@ public class Enemy : NetworkBehaviour
         {
             control.Setup(config, this);
         }
+
+        hp = config.startingHP;
     }
 
     private struct InputCache
@@ -96,6 +107,11 @@ public class Enemy : NetworkBehaviour
             control.UpdatePrevNextInput(cachedInput.previousWeapon, cachedInput.nextWeapon);
             control.UpdateFixedPhysics();
         }
-        
+
+    }
+
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
     }
 }

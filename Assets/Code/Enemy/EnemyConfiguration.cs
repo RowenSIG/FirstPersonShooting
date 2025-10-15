@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class EnemyConfiguration : ScriptableObject
 {
-     public float horizontalTurnSpeed;
+    public float startingHP;
+    
+    public float horizontalTurnSpeed;
     public float verticalLookSpeed;
     public float minYLookAngle;
     public float maxYLookAngle;

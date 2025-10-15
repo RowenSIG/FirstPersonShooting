@@ -3,15 +3,13 @@ using Fusion;
 using UnityEngine;
 using static Logging;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : SimulationBehaviour
 {
     private static EnemyManager instance;
     public static EnemyManager Instance => instance;
 
     private GameObject enemyContainer = null;
 
-    [SerializeField]
-    private NetworkRunner Runner;
 
     [SerializeField]
     private Enemy enemyPrefab;
@@ -19,9 +17,13 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     private EnemyConfiguration enemyConfigPrefab;
 
+    [SerializeField]
+    private float enemySpawnPeriod;
+    [SerializeField]
+    private int enemyLimit;
+
     private List<Enemy> enemies = new List<Enemy>();
     private float lastSpawn;
-    private float spawnPeriod = 5;
 
     void Awake()
     {
@@ -36,11 +38,16 @@ public class EnemyManager : MonoBehaviour
 
     void Update()
     {
-        if(Time.timeSinceLevelLoad - lastSpawn > spawnPeriod && enemies.Count < 4)
+        if (Time.realtimeSinceStartup < 10f)
+            return;
+
+        if (Time.timeSinceLevelLoad - lastSpawn > enemySpawnPeriod && enemies.Count < enemyLimit)
         {
             InstantiateEnemy();
             lastSpawn = Time.timeSinceLevelLoad;
         }
+
+        enemies.RemoveAll(p => p == null);
     }
 
     public void InstantiateEnemy()
@@ -61,5 +68,18 @@ public class EnemyManager : MonoBehaviour
         var spawn = LevelManager.Instance.GetLevel().GetRandomEnemySpawnPoint();
         enemy.transform.position = spawn.transform.position;
         enemy.transform.rotation = spawn.transform.rotation;
+    }
+
+    public void EnemyHit(Enemy enemy, float damage)
+    {
+        if(Runner.IsSharedModeMasterClient)
+        {
+            enemy.TakeDamage(damage);
+
+            if(enemy.hp <= 0)
+            {
+                Runner.Despawn(enemy.GetComponent<NetworkObject>());
+            }
+        }
     }
 }

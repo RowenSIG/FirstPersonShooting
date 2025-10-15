@@ -2638,6 +2638,7 @@ MonoBehaviour:
   reloadingVisual: {fileID: 3012958521830260441}
   recoil: {fileID: 2569185742351775953}
   bulletForce: 0.5
+  bulletDamage: 10
 --- !u!114 &2569185742351775953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5933,6 +5934,7 @@ MonoBehaviour:
   reloadingVisual: {fileID: 8684801598281627694}
   recoil: {fileID: 2418585377277788896}
   bulletForce: 1
+  bulletDamage: 40
 --- !u!114 &2418585377277788896
 MonoBehaviour:
   m_ObjectHideFlags: 0

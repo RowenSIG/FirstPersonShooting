@@ -44,6 +44,8 @@ public class PlayerWeaponHitScan : PlayerWeapon
 
     [SerializeField]
     private float bulletForce;
+    [SerializeField]
+    private float bulletDamage;
 
     private float recycleTimer = 0f;
     private float reloadTimer = 0f;
@@ -147,9 +149,23 @@ public class PlayerWeaponHitScan : PlayerWeapon
         if (hit)
         {
             NetworkId netObjectId = default;
-            if (hitInfo.collider.gameObject.GetComponent<NetworkObject>() is NetworkObject netObj)
+            if (hitInfo.collider != null)
             {
-                netObjectId = netObj.Id;
+                if (hitInfo.collider.gameObject.GetComponent<NetworkObject>() is NetworkObject netObj)
+                {
+                    netObjectId = netObj.Id;
+                }
+                else if (hitInfo.collider.attachedRigidbody != null
+                    && hitInfo.collider.attachedRigidbody.GetComponent<NetworkObject>() is NetworkObject netObj2)
+                {
+                    netObjectId = netObj2.Id;
+
+
+                    if(netObj2.GetComponent<Enemy>() is Enemy enemy)
+                    {
+                        EnemyManager.Instance.EnemyHit(enemy, bulletDamage);
+                    }
+                }
             }
             
             projectileData.Set(fireCount % projectileData.Length, new ProjectileData()
@@ -166,13 +182,13 @@ public class PlayerWeaponHitScan : PlayerWeapon
 
     private void ShowBulletHit(Vector3 point, Vector3 normal, Vector3 direction, NetworkId id)
     {
-        
-            //wherever it hit:
-            var bulletHit = Instantiate(bulletStrikePrefab);
-            bulletHit.transform.position = point;
-            bulletHit.transform.forward = normal;
 
-        
+        //wherever it hit:
+        var bulletHit = Instantiate(bulletStrikePrefab);
+        bulletHit.transform.position = point;
+        bulletHit.transform.forward = normal;
+
+
         if (id)
         {
             Runner.TryFindObject(id, out NetworkObject netObj);
@@ -181,24 +197,34 @@ public class PlayerWeaponHitScan : PlayerWeapon
                 bulletHit.transform.SetParent(netObj.transform, true);
 
                 var collider = netObj.GetComponent<Collider>();
-                if (collider.attachedRigidbody != null)
+                if (collider != null)
                 {
-                    collider.attachedRigidbody.AddForceAtPosition(direction * bulletForce, point, ForceMode.Impulse);
+
+                    if (collider.attachedRigidbody != null)
+                    {
+                        collider.attachedRigidbody.AddForceAtPosition(direction * bulletForce, point, ForceMode.Impulse);
+                    }
+
+                    var smashblock = collider.gameObject.GetComponent<SmashBlock>();
+                    if (smashblock != null)
+                    {
+                        var body = smashblock.GetComponent<Rigidbody>();
+                        var forceDir = direction + Vector3.up;
+                        if (body == null)
+                        {
+                            body = smashblock.AddComponent<Rigidbody>();
+                            smashblock.GoPhysical(body);
+                            forceDir = Vector3Utils.RandomVector3().normalized;
+                        }
+                        body.AddForceAtPosition(forceDir * 10f, point, ForceMode.Impulse);
+                    }
+                }
+                var rb = netObj.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.AddForceAtPosition(direction * bulletForce, point, ForceMode.Impulse);
                 }
 
-                var smashblock = collider.gameObject.GetComponent<SmashBlock>();
-                if (smashblock != null)
-                {
-                    var body = smashblock.GetComponent<Rigidbody>();
-                    var forceDir = direction + Vector3.up;
-                    if (body == null)
-                    {
-                        body = smashblock.AddComponent<Rigidbody>();
-                        smashblock.GoPhysical(body);
-                        forceDir = Vector3Utils.RandomVector3().normalized;
-                    }
-                    body.AddForceAtPosition(forceDir * 10f, point, ForceMode.Impulse);
-                }
             }
         }
     }
