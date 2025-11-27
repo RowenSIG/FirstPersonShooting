@@ -17,7 +17,7 @@ MonoBehaviour:
   verticalLookSpeed: 1
   minYLookAngle: 1
   maxYLookAngle: 1
-  forwardMoveSpeed: 3
+  forwardMoveSpeed: 0
   backwardMoveSpeed: 1
   sidewaysMoveSpeed: 1
   sprintSpeedMultiplier: 1

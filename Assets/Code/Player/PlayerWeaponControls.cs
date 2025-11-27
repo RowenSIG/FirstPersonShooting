@@ -8,6 +8,7 @@ public class PlayerWeaponControls : PlayerComponentControls
 
     [SerializeField]
     private PlayerWeaponHitScan pistolWeapon;
+    
     [SerializeField]
     private PlayerWeaponHitScan machineGunWeapon;
 

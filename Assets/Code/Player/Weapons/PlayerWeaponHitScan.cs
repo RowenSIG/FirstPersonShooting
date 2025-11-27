@@ -160,6 +160,16 @@ public class PlayerWeaponHitScan : PlayerWeapon
                 {
                     netObjectId = netObj2.Id;
                 }
+                else
+                {
+                    //just show a hit locally
+                    
+                    var bulletHit = Instantiate(bulletStrikePrefab);
+                    bulletHit.transform.position = hitInfo.point;
+                    bulletHit.transform.forward = hitInfo.normal;
+                    bulletHit.transform.SetParent(hitInfo.collider.transform);
+                    return;
+                }
             }
             
             projectileData.Set(fireCount % projectileData.Length, new ProjectileData()

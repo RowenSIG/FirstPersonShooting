@@ -3,10 +3,12 @@ using Fusion;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NetworkStarter : MonoBehaviour {
+public class NetworkStarter : MonoBehaviour
+{
     private NetworkRunner runner;
 
-    void Start() {
+    void Start()
+    {
         runner = GetComponent<NetworkRunner>();
 
  // Get the current Unity scene’s build index
@@ -21,7 +23,8 @@ public class NetworkStarter : MonoBehaviour {
 
 
 #if UNITY_WEBGL
-        runner.StartGame(new StartGameArgs {
+        runner.StartGame(new StartGameArgs 
+        {
             GameMode = GameMode.Shared,
             SessionName = "WebGLRoom",
             Scene = sceneInfo,
@@ -29,8 +32,9 @@ public class NetworkStarter : MonoBehaviour {
         });
 #else
         // Optional: fallback for native builds
-        runner.StartGame(new StartGameArgs {
-            GameMode = GameMode.Shared,
+        runner.StartGame(new StartGameArgs 
+        {
+            GameMode = GameMode.Single,
             SessionName = "NativeRoom",
             Scene = sceneInfo,
             PlayerCount = 4

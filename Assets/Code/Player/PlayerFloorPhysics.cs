@@ -92,7 +92,7 @@ public class PlayerFloorPhysics : PlayerComponentControls
         if (contactPoints.Count > 0)
         {
             Gizmos.DrawLine(contactPoints[0].point, contactPoints[0].point + rampDir * 10f);
-            Gizmos.color = Color.orange;
+            Gizmos.color = Color.red;
             Gizmos.DrawLine(contactPoints[0].point, contactPoints[0].point + rampPerp * 10f);
         }
     }
